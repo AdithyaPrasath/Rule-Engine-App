@@ -1,2 +1,6 @@
-Flask==2.2.2
-Flask-SQLAlchemy==2.5.1
+Flask==2.3.3
+Flask-Mail==0.9.1
+Werkzeug==2.3.3
+python-dotenv==1.0.0
+SQLAlchemy==1.4.39
+itsdangerous==2.1.2
