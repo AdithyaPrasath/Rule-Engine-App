@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form in HTML and CSS | Codehal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrapper">
+        <form action="{{ url_for('login') }}" method="POST">  <!-- Update action and method -->
+            <h1>Login</h1>
+            
+            <div class="input-box">
+                <input type="text" name="username" placeholder="Username" required>  <!-- Add name attribute -->
+                <box-icon type="solid" name="user"></box-icon>
+            </div>
+
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password" required>  <!-- Add name attribute -->
+                <box-icon type="solid" name="lock-alt"></box-icon>
+            </div>
+
+            <div class="remember-forgot">
+               
+                <a href="{{ url_for('forgot_password') }}">Forgot password?</a>  <!-- Update href to point to forgot password page -->
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+
+            <div class="register-link">
+                <p>Don't have an account? <a href="/register">Register</a></p> <!-- Update href to point to register page -->
+            </div>
+        </form>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    </div>
+</body>
+
+</html>

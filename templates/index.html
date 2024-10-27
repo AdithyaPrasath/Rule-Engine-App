@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+
+/* Moving Background Styles */
+.moving-background { 
+    position: fixed; /* Fixed position for background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('static/night.jpeg'); /* Replace with your image URL or path */
+    background-size: cover; /* Cover the entire area */
+    background-position: center; /* Center the image */
+     
+    z-index: -1; /* Behind everything else */
+}
+
+/* Gradient Animation */
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%; /* Starting position */
+    }
+    50% {
+        background-position: 100% 50%; /* Midpoint position */
+    }
+    100% {
+        background-position: 0% 50%; /* Ending position */
+    }
+}
+
+/* Highlight Animation */
+@keyframes highlight {
+    0% { 
+        box-shadow: 0 0 5px rgba(81, 203, 238, 1); /* Initial shadow */
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(81, 203, 238, 0.8); /* Highlight shadow */
+    }
+    100% { 
+        box-shadow: 0 0 5px rgba(81, 203, 238, 1); /* Return to initial shadow */
+    }
+}
+
+/* Highlight Class */
+.highlight {
+    animation: highlight 2s ease-in-out; /* Apply highlight animation */
+}
+
+
+        .navbar-nav .nav-link {
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+        .navbar-nav .nav-link:hover {
+            /* background-color: rgba(255, 255, 255, 0.1); Lighten background on hover */
+            color: #007bff; /* Change text color on hover */
+        }
+        .navbar-nav .nav-item.active .nav-link {
+            background-color: rgba(0, 123, 255, 0.5); /* Highlight active link */
+            color: white; /* Ensure text is white */
+        }
+        .dropdown-menu {
+            background-color: #686b6f; /* Dark background for dropdown */
+        }
+        .dropdown-item {
+            color: #ffffff; /* Set font color to white for better visibility */
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Lighten background on hover */
+            color: #618df3; /* Change text color on hover */
+        }
+
+        .card-header {
+            background-color: #656365;
+        }
+
+        .footer {
+            background-color: #212529;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #91b7e0;
+        }
+
+        .light-mode {
+            background-color: #f8f9fa;
+            color: black;
+        }
+
+        .light-mode .card {
+    background-color: transparent; /* Keeps the background transparent */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Border specification */
+    backdrop-filter: blur(20px); /* Blurs the background */
+    color: #fff; /* Text color */
+    padding: 30px 40px; /* Padding around the card */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow specification */
+}
+
+
+        .light-mode .card:hover {
+            box-shadow: transparent;
+        }
+
+        .light-mode .footer {
+            background-color: #e9ecef;
+            color: black;
+        }
+
+        .light-mode .card-header {
+    background-color: transparent; /* White background color */
+    border: 1.5px solid #000000;
+    border-radius: 10px; /* Black border */
+    color: #000000;
+    font-size: 1.2rem /* Optional: Set text color to black for contrast */
+}
+
+        
+
+        .card-container {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    margin-top: 50px; /* Adjust this value to move the cards down */
+}
+        
+        .card-container .card {
+            flex: 1;
+            margin: 10px; /* Adjust margin as needed */
+            min-width: 300px; /* Minimum width for cards */
+        }
+
+
+        .user-data-hidden {
+             display: none; /* Hide by default */
+        }
+        .card:hover #user-data-form {
+            display: block; /* Show when the card is hovered */
+        }
+
+        .light-mode .table {
+
+        border: 2px solid #070707;
+        }
+
+        .light-mode .table th {
+            background-color: #e5e5e8; /* Change header background color */
+            color: rgb(2, 2, 2); /* Change header text color */
+        }
+        .light-mode .table td {
+            border: none; /* Remove border from table cells */
+            background-color: #ffffff; /* Ensure table cells are light */
+            color: black; /* Ensure text is dark */
+        }
+        /* Dark Mode Table Styles */
+        .table {
+            border: none; /* Remove border from the table */
+        }
+        .table th {
+            background-color: #343a40; /* Dark header background */
+            color: white; /* Dark header text color */
+        }
+        .table th,
+        .table td {
+            border: none; /* Remove border from table headers and cells */
+        }
+        .card {
+    background-color: transparent; /* Keeps the background transparent */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Border specification */
+    backdrop-filter: blur(20px); /* Blurs the background */
+    color: #fff; /* Text color */
+    padding: 30px 40px; /* Padding around the card */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow specification */
+}
+
+        .card-header {
+    background-color: transparent; /* White background color */
+    border: 1.5px solid #000000;
+    border-radius: 10px; /* Black border */
+    color: #000000;
+    font-size: 1.2rem /* Optional: Set text color to black for contrast */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Scale up the card */
+    z-index: 10; /* Bring the card to the front */
+    box-shadow: 0 0 20px rgba(199, 206, 206, 0.8), 0 0 30px rgba(172, 177, 177, 0.5); /* Optional: Add shadow for depth */
+    backface-visibility: hidden; /* Prevent blurriness */
+    will-change: transform; /* Optimize performance */
+}
+
+/* Existing glow-label styling */
+.glow-label {
+    color: white; /* Bright white color for dark mode */
+    font-size: 1.2rem; /* Adjust size as needed */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Slight shadow */
+    font-weight: bold
+}
+
+body.light-mode .glow-label {
+    color: black; /* Change to black color for light mode */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), /* Outer glow */
+                 0 0 10px rgba(255, 255, 255, 0.5), /* Inner glow */
+                 0 0 15px rgba(255, 255, 255, 0.5);
+    font-weight: bold
+}
+
+.white-label {
+    color: rgb(0, 0, 0);
+    text-shadow: 0.2px 0.2px 0.4px rgb(0, 0, 0); /* Bright white color */
+    
+}
+
+.rules_example{
+    color: rgb(0, 0, 0);
+}
+
+.hover-label {
+    color: white; /* Bright white color for dark mode */
+    font-size: 1.2rem; /* Adjust size as needed */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Slight shadow */
+}
+
+/* Light mode styling for glow-label */
+body.light-mode .hover-label {
+    color: black; /* Change to black color for light mode */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), /* Outer glow */
+                 0 0 10px rgba(255, 255, 255, 0.5), /* Inner glow */
+                 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+
+        
+
+
+
+        
+
+    </style>
+</head>
+
+<body>
+
+    <div class="moving-background"></div> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+        <a class="navbar-brand" href="#">Rule Engine</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+               
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Manage Rules
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#create-rule">Create Rule</a>
+                        <a class="dropdown-item" href="#evaluate-rule">Evaluate Rule</a>
+                        <a class="dropdown-item" href="#combine-rules">Combine rules</a>
+                        <a class="dropdown-item" href="#modify-rule">Modify Rule</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#help">Help</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#rules-list">View Rules</a>
+                </li>
+            </ul>
+            <button id="theme-toggle" class="btn btn-dark ml-2">
+                <i id="theme-icon" class="fas fa-cloud-sun"></i>
+            </button>
+            
+        </div>
+        
+    </nav>
+
+    
+    
+
+
+
+    <div class="container mt-4">
+        <div class="card-container">
+            <div class="card" id="create-rule">
+                <div class="card-header">
+                    <i class="fas fa-plus"></i> Create Rule
+                </div>
+                <div class="card-body">
+                    <form id="create-rule-form">
+                        <div class="form-group">
+                            <label for="rule_string" class="glow-label">Rule String:</label>
+                            <textarea id="rule_string" class="form-control" required placeholder="e.g., Salary > 50000"></textarea>
+                            <small class="white-label">
+                                Enter rules in the format: <br>
+                                - Single Condition: age > 30 <br>
+                                - Multiple Conditions: ((age > 30) AND (salary > 50000)) <br>
+                                - Use AND and OR to combine conditions.
+                            </small>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Create Rule</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card" id="evaluate-rule">
+                <div class="card-header">
+                    <i class="fas fa-check"></i> Evaluate Rule
+                </div>
+                <div class="card-body">
+                    <form id="evaluate-rule-form">
+                        <div class="form-group">
+                            <label for="rule_id" class="glow-label">Rule ID:</label>
+                            <input type="number" id="rule_id" class="form-control" required placeholder="Enter the Rule ID">
+                        </div>
+                        <h6 class="glow-label">User Data</h6>
+                        <div id="user-data-form" class="user-data-hidden">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name" class="hover-label">Name:</label>
+                                <input type="text" id="name" class="form-control" required placeholder="Enter your name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="age" class="hover-label">Age:</label>
+                                <input type="number" id="age" class="form-control" required placeholder="Enter your age">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="department" class="hover-label">Department:</label>
+                                <input type="text" id="department" class="form-control" required placeholder="Enter your department">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="salary" class="hover-label">Salary:</label>
+                                <input type="number" id="salary" class="form-control" required placeholder="Enter your salary">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="spends" class="hover-label">Spends:</label>
+                                <input type="number" id="spends" class="form-control" required placeholder="Enter your spends">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="experience" class="hover-label">Experience:</label>
+                                <input type="number" id="experience" class="form-control" required placeholder="Enter your experience in years">
+                            </div>
+                        </div>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Evaluate Rule</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card" id="combine-rules">
+                <div class="card-header">
+                    <i class="fas fa-compress"></i> Combine Rules
+                </div>
+                <div class="card-body">
+                    <form id="combine-rules-form">
+                        <div class="form-group">
+                            <label for="rule_strings" class="glow-label">Rule Strings:</label>
+                            <textarea id="rule_strings" class="form-control" required placeholder="Enter multiple rule strings separated by newline"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Combine Rules</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card" id="modify-rule">
+                <div class="card-header">
+                    <i class="fas fa-edit"></i> Modify Rule
+                </div>
+                <div class="card-body">
+                    <form id="modify-rule-form">
+                        <div class="form-group">
+                            <label for="modify_rule_id" class="glow-label">Rule ID:</label>
+                            <input type="number" id="modify_rule_id" class="form-control" required placeholder="Enter the Rule ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="modify_rule_string" class="glow-label">New Rule String:</label>
+                            <textarea id="modify_rule_string" class="form-control" required placeholder="e.g., Age < 30"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Modify Rule</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card" id="rules-list">
+            <div class="card-header">
+                <i class="fas fa-list"></i> All Rules
+                <button id="toggle-rules" class="btn btn-sm btn-primary float-right">Show/Hide Rules</button>
+            </div>
+            <div class="card-body" style="display: none;">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>Rule ID</th>
+                            <th>Rule String</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rules-table-body">
+                        <!-- Rules will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card" id="help">
+            <div class="card-header">
+                <i class="fas fa-question-circle"></i> Help
+            </div>
+            <div class="card-body">
+                <h5 class="glow-label">Rules List Example:</h5>
+                <ul>
+                    <li class = "rules_example">Rule 1: Salary > 50000</li>
+                    <li class = "rules_example">Rule 2: Age < 30</li>
+                    <li class = "rules_example">Rule 3: Experience >= 5 </li>
+                    <li class = "rules_example">Rule 4: Spends < 20000</li>
+                </ul>
+                <p class = "rules_example">To create a rule, input the rule string and click 'Create Rule'. To evaluate a rule, enter the Rule ID and user data, then click 'Evaluate Rule'. To modify a rule, provide the Rule ID and the new rule string, then click 'Modify Rule'.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div>© 2024 Rule Engine Application</div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Theme Toggle Functionality
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const movingBackground = document.querySelector('.moving-background');
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fas', 'fa-cloud-sun'); // Change the icon for light mode
+                themeIcon.classList.add('fas', 'fa-sun');
+                movingBackground.style.backgroundImage = "url('static/day.jpeg')"; // Replace with your light mode image path
+            } else {
+                themeIcon.classList.remove('fas', 'fa-sun'); // Change the icon for dark mode
+                themeIcon.classList.add('fas', 'fa-cloud-sun');
+                movingBackground.style.backgroundImage = "url('static/night.jpeg')"; // Replace with your light mode image path
+            }
+        });
+
+        document.getElementById('create-rule-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const ruleString = document.getElementById('rule_string').value;
+
+        // Check if ruleString is not empty
+        if (!ruleString) {
+            alert("Please enter a rule string.");
+            return;
+        }
+
+        fetch('http://127.0.0.1:5000/create_rule', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ rule_string: ruleString })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert("Rule created successfully!"); // Show success alert
+                console.log("Adding rule to table:", data.rule_id, data.rule_string); // Debug log
+                addRuleToTable(data.rule_id, data.rule_string); 
+            } else {
+                alert(data.error); // Show error message
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        });
+    
+        document.getElementById('evaluate-rule-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const ruleId = document.getElementById('rule_id').value;
+        const userData = {
+            name: document.getElementById('name').value,
+            age: parseInt(document.getElementById('age').value),
+            department: document.getElementById('department').value,
+            salary: parseFloat(document.getElementById('salary').value),
+            spends: parseFloat(document.getElementById('spends').value),
+            experience: parseInt(document.getElementById('experience').value)
+        };
+
+        fetch('http://127.0.0.1:5000/evaluate_rule', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ rule_id: ruleId, user_data: userData })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert(`Rule evaluation result: ${data.eligible ? 'Eligible' : 'Not Eligible'}`);
+            } else {
+                alert(data.error); // Show error message
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('combine-rules-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    
+    const ruleStrings = document.getElementById('rule_strings').value
+        .split('\n') // Split by new lines
+        .map(rule => rule.trim()) // Trim whitespace
+        .filter(rule => rule); // Filter out empty strings
+
+    // Check if ruleStrings is not empty
+    if (ruleStrings.length === 0) {
+        alert("Please enter at least one rule string.");
+        return;
+    }
+
+    console.log("Sending rule strings:", ruleStrings); // Debugging line
+
+    fetch('http://127.0.0.1:5000/combine_rules', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rule_strings: ruleStrings }) // Send as JSON
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert("Rules combined successfully!"); // Show success alert
+            console.log("Combined AST:", data.ast); // Debug log
+            
+            // Clear the input field after successful combination
+            document.getElementById('rule_strings').value = ''; // Clear the input
+        } else {
+            alert(data.error); // Show error message
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+        document.getElementById('modify-rule-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const ruleId = document.getElementById('modify_rule_id').value;
+            const newCondition = document.getElementById('modify_rule_string').value;
+
+            fetch('http://127.0.0.1:5000/modify_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rule_id: ruleId, new_condition: newCondition })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(`Rule modified successfully! New Rule: ${data.new_rule_string}`);
+                    // Update the rule in the table
+                    updateRuleInTable(ruleId, data.new_rule_string);
+            } else {
+                alert(data.error); // Show error message
+                }
+            })
+            .catch(error => console.error('Error:', error));
+            });
+            document.addEventListener("DOMContentLoaded", function() {
+                const evaluateCard = document.getElementById("evaluate-rule");
+                const userDataForm = document.getElementById("user-data-form");
+                        
+                evaluateCard.addEventListener("mouseenter", function() {
+                    userDataForm.classList.remove("user-data-hidden");
+                }); 
+
+                evaluateCard.addEventListener("mouseleave", function() {
+                    userDataForm.classList.add("user-data-hidden");
+                });
+                
+            });
+                
+            document.addEventListener("DOMContentLoaded", function() {
+                const rulesList = document.getElementById('rules-list');
+                const rulesBody = rulesList.querySelector('.card-body');
+                const toggleButton = document.getElementById('toggle-rules');
+
+                // Toggle rules visibility
+                toggleButton.addEventListener('click', function() {
+                if (rulesBody.style.display === 'none') {
+                    rulesBody.style.display = 'block';
+                    fetchRules();
+                } else {
+                    rulesBody.style.display = 'none';
+                }
+                });
+
+                function fetchRules() {
+                    fetch('http://127.0.0.1:5000/rules')
+                    .then(response => response.json())
+                    .then(data => {
+                    const tableBody = document.getElementById('rules-table-body');
+                    tableBody.innerHTML = ''; // Clear existing content
+                    data.forEach(rule => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${rule.id}</td>
+                            <td>${rule.rule_string}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning edit-rule" data-id="${rule.id}">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-rule" data-id="${rule.id}">Delete</button>
+                            </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                        addEventListeners();
+                    })
+                    .catch(error => console.error('Error fetching rules:', error));
+                    }
+
+                    function addEventListeners() {
+                        document.querySelectorAll('.edit-rule').forEach(button => {
+                            button.addEventListener('click', function() {
+                                const ruleId = this.getAttribute('data-id');
+                                const newRuleString = prompt("Enter new rule string:");
+                                if (newRuleString) {
+                                    updateRule(ruleId, newRuleString);
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll('.delete-rule').forEach(button => {
+                            button.addEventListener('click', function() {
+                                const ruleId = this.getAttribute('data-id');
+                                if (confirm("Are you sure you want to delete this rule?")) {
+                                    deleteRule(ruleId);
+                                }
+                            });
+                        });
+                        }
+                        function addRuleToTable(ruleId, ruleString) {
+                            const table = document.getElementById('rulesTable').getElementsByTagName('tbody')[0];
+                            const newRow = table.insertRow();
+    
+                            const cellId = newRow.insertCell(0);
+                            const cellRule = newRow.insertCell(1);
+                            const cellActions = newRow.insertCell(2);
+
+                            cellId.textContent = ruleId;
+                            cellRule.textContent = ruleString;
+
+                            // Add delete button
+                            const deleteButton = document.createElement('button');
+                            deleteButton.textContent = 'Delete';
+                            deleteButton.className = 'btn btn-danger btn-sm';
+                            deleteButton.onclick = function() { deleteRule(ruleId); };
+                            cellActions.appendChild(deleteButton);
+                        }
+                        function updateRule(ruleId, newRuleString) {
+                            fetch('http://127.0.0.1:5000/modify_rule', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ rule_id: ruleId, new_condition: newRuleString })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert("Rule updated successfully");
+                                        fetchRules(); // Refresh the rules list
+                                    } else {
+                                        alert("Failed to update rule: " + data.error);
+                                        }
+                                })
+                                .catch (error => console.error('Error updating rule:', error));
+                        }
+
+                        function deleteRule(ruleId) {
+                            fetch('http://127.0.0.1:5000/delete_rule', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ rule_id: ruleId })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Rule deleted successfully");
+                                    fetchRules(); // Refresh the rules list
+                                } else {
+                                    alert("Failed to delete rule: " + data.error);
+                                }
+                            })
+                            .catch(error => console.error('Error deleting rule:', error));
+                        }
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+            // Get all navigation links
+                const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        // Get the target section ID from the href attribute
+                        const targetId = this.getAttribute('href').substring(1);
+                        const targetSection = document.getElementById(targetId);
+
+                        if (targetSection) {
+                            // Scroll to the target section
+                            targetSection.scrollIntoView({ behavior: 'smooth' });
+
+                            // Add the highlight effect
+                            targetSection.classList.add('highlight');
+                            setTimeout(() => {
+                                targetSection.classList.remove('highlight');
+                            }, 2000);
+                        }
+                    });
+                });
+            });
+    </script>
+</body>
+
+</html>
