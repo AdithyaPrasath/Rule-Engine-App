@@ -5,7 +5,10 @@ With a secure user authentication system, users can create accounts, log in, and
 
 ## Web Server URL
 https://9416-2405-201-e02c-a24c-bcaf-b3a6-8f4e-b6c6.ngrok-free.app
-
+![Rule1](https://github.com/user-attachments/assets/6975a149-f7f3-4c91-bb2f-58fc84051634)
+![rule2](https://github.com/user-attachments/assets/84ed8163-0ef7-4652-937d-f8b0a78320ce)
+![rule3](https://github.com/user-attachments/assets/ee0c770c-64d1-4210-bf98-1121fc1cbcf8)
+![rule4](https://github.com/user-attachments/assets/272cfef3-659c-4f60-94b0-83c3bbb4a544)
 ## Features
 User Registration and Login: Secure user accounts with hashed passwords, session management, and authentication.
 Password Reset Functionality: Users can reset forgotten passwords via email verification.
@@ -158,7 +161,4 @@ The application includes various HTML files for user interaction:
 
 We welcome contributions to expand the Rule Engine Application’s features and capabilities. Please submit pull requests or open issues with suggestions or feedback.
 
-![Rule1](https://github.com/user-attachments/assets/6975a149-f7f3-4c91-bb2f-58fc84051634)
-![rule2](https://github.com/user-attachments/assets/84ed8163-0ef7-4652-937d-f8b0a78320ce)
-![rule3](https://github.com/user-attachments/assets/ee0c770c-64d1-4210-bf98-1121fc1cbcf8)
-![rule4](https://github.com/user-attachments/assets/272cfef3-659c-4f60-94b0-83c3bbb4a544)
+
