@@ -1,3 +1,4 @@
+
 # Rule Engine Application
 The Rule Engine Application is a powerful, web-based platform that enables users to create, evaluate, modify, combine, and manage complex rules through a user-friendly interface. Designed with security and robust functionality in mind, this application is ideal for decision-making processes, automated workflows, and any scenario requiring advanced conditional logic.
 With a secure user authentication system, users can create accounts, log in, and reset passwords, with rules stored in an SQLite database for easy access and modification. The Rule Engine supports complex rule creation by parsing expressions into an Abstract Syntax Tree (AST) for structured evaluation. Users can combine multiple rules to form intricate logical expressions, making it ideal for dynamic workflows.
@@ -156,3 +157,8 @@ The application includes various HTML files for user interaction:
 #Contributing
 
 We welcome contributions to expand the Rule Engine Application’s features and capabilities. Please submit pull requests or open issues with suggestions or feedback.
+
+![Rule1](https://github.com/user-attachments/assets/6975a149-f7f3-4c91-bb2f-58fc84051634)
+![rule2](https://github.com/user-attachments/assets/84ed8163-0ef7-4652-937d-f8b0a78320ce)
+![rule3](https://github.com/user-attachments/assets/ee0c770c-64d1-4210-bf98-1121fc1cbcf8)
+![rule4](https://github.com/user-attachments/assets/272cfef3-659c-4f60-94b0-83c3bbb4a544)
